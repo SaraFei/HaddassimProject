@@ -10,7 +10,8 @@ const AddPatientForm = () => {
     let navigate = useNavigate();
     let [errorVaccinArr, setErrorVaccinArr] = useState(false);
     let [errorRecovery, setErrorRecovery] = useState(false);
-
+    let [samePatient, setSamePatient] = useState(false);
+    let [errorValidation, setErrorValidation] = useState(false);
     const { register, handleSubmit, formState: { errors }, watch } = useForm();
 
 
@@ -43,6 +44,7 @@ const AddPatientForm = () => {
         }
         if (!positiveDate && recoveryDate) {
             setErrorRecovery(true);
+            return;
         }
         if (positiveDate) {
             patient.positiveDate = positiveDate;
@@ -64,15 +66,17 @@ const AddPatientForm = () => {
         }
         catch (error) {
             if (error.response.request.status === 409 && error.response.data.type === "same patient") {
+                setSamePatient(true);
                 console.log("There is a patient with such id");
             }
             if (error.response.request.status === 403 && error.response.data.type === "error validate") {
+                setErrorValidation(true);
                 console.log("One of the fields you entered was not filled in correctly");
             }
             else {
                 console.error('Failed to register:', error);
             }
-            // setError('Registration failed. Please try again.');
+
         }
     }
 
@@ -82,6 +86,7 @@ const AddPatientForm = () => {
         <>
             הוספת חבר קופ"ח
             <form onSubmit={handleSubmit(tryAddPatient)}>
+                {samePatient && <p>קיים משתמש עם כזו ת.ז</p>}
                 <h2>  <label>שם פרטי</label>
                     <input type='text' {...register('firstName', { required: "שם פרטי זהו שדה חובה", pattern: { message: "שם מורכב רק מאותיות", value: /^[A-Za-zא-ת\s]+$/ } })} />
                     {errors.firstName && <p>{errors.firstName.message}</p>}</h2>
@@ -90,7 +95,7 @@ const AddPatientForm = () => {
                     {errors.lastName && <p>{errors.lastName.message}</p>}</h2>
                 <label > ת.ז.</label>
                 <h2>    <input type='text'  {...register('id', {
-                    required: "id is required", pattern: {
+                    required: "ת.ז. שדה חובה", pattern: {
                         value: /^[0-9]{9}$/,
                         message: 'נא הקש ת.ז. תקינה! בעלת 9 ספרות בלבד'
                     }
@@ -117,10 +122,10 @@ const AddPatientForm = () => {
                     {errors.phonNum && <p>{errors.phonNum.message}</p>}</h2>
                 כתובת:
                 <h2> <label > עיר </label>
-                    <input type='text' {...register('city', { required: "עיר שדה חובה", pattern: { message: "אותיות בלבד", value: /^[A-Za-zא-ת\s]+$/ } })} />
+                    <input type='text' {...register('city', { required: "עיר שדה חובה", pattern: { message: "אותיות בלבד", value: /^[A-Za-zא-ת\s]+$/ },minLength:{value:3,message:"לפחות 3 אותיות"} ,maxLength:{value:15,message:"לא יותר מ15 תווים"}})} />
                     {errors.city && <p>{errors.city.message}</p>} </h2>
                 <h2> <label > רחוב </label>
-                    <input type='text' {...register('street', { required: "רחוב זהו שדה חובה", pattern: { message: "אותיות בלבד", value: /^[A-Za-zא-ת\s]+$/ } })} />
+                    <input type='text' {...register('street', { required: "רחוב זהו שדה חובה", pattern: { message: "אותיות בלבד", value: /^[A-Za-zא-ת\s]+$/ } ,minLength:{value:3,message:"לפחות 3 אותיות"} ,maxLength:{value:15,message:"לא יותר מ15 תווים"}})} />
                     {errors.street && <p>{errors.street.message}</p>} </h2>
                 <h2> <label > מס' בית </label>
                     <input type='text' {...register('houseNum', { required: "מספר בית הוא שדה חובה", pattern: { message: " מספרים בלבד!", value: /^[0-9]{1,3}$/, } })} />
@@ -150,7 +155,7 @@ const AddPatientForm = () => {
                 <h2>  <label > תאריך החלמה </label>
                     <input type='date' {...register('recoveryDate', { min: { value: watch('positiveDate'), message: " תאריך החלמה אחרי תאריך קבלת הנגיף " } }, { max: { value: new Date().toISOString().split("T")[0], message: "תאריך החלמה לא יכול להיות גדול מהיום" } })} />
                     {errors.recoveryDate && <p>{errors.recoveryDate.message}</p>}</h2>
-                    {errorRecovery&&<p>לא ניתן להכניס תאריך החלמה ללא תאריך קבלת הנגיף</p>}
+                {errorRecovery && <p>לא ניתן להכניס תאריך החלמה ללא תאריך קבלת הנגיף</p>}
                 <button type="submit">הוסף חבר</button>
             </form>
         </>

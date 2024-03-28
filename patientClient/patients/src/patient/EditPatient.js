@@ -42,11 +42,13 @@ const EditPatient = () => {
 
 
     const onSubmit = async (data) => {
-        let { firstName, lastName, telephonNum, phonNum, address, positiveDate, recoveryDate,
+        let { firstName, lastName, telephonNum, phonNum, city, street, houseNum, positiveDate, recoveryDate,
             date, manufacturer } = data;
+        let address = { city, street, houseNum };
         let patientToEdit = {
             firstName, lastName, address, telephonNum, phonNum
         };
+        let vaccineEntry
         if (date == '' && manufacturer == '') {
             date = null;
             manufacturer = null;
@@ -59,19 +61,22 @@ const EditPatient = () => {
         }
 
         if (date && manufacturer) {
-            let vaccineEntry = { date, manufacturer };
-            await ArrayEdit.push(vaccineEntry);
-            patientToEdit.receivingVaccineDate = ArrayEdit;
+             vaccineEntry = { date, manufacturer };
+
 
         }
         if (!date && manufacturer || !manufacturer && date) {
             setErrorVaccinArr(true);
+            return;
         }
         if (!positiveDate && recoveryDate) {
             setErrorRecovery(true);
+            return;
         }
         const userConfirmation = window.confirm('האם אתה בטוח שברצונך לעדכן את הפרטים?');
         if (userConfirmation) {
+            await ArrayEdit.push(vaccineEntry);
+            patientToEdit.receivingVaccineDate = ArrayEdit;
             try {
                 console.log("patientToEdit before update:", patientToEdit);
                 const response = await upDatePatient(patient._id, patientToEdit);
@@ -96,6 +101,8 @@ const EditPatient = () => {
 
             }
         }
+
+
     }
     return (
         <form onSubmit={handleSubmit(onSubmit)} >
@@ -112,28 +119,28 @@ const EditPatient = () => {
                 <input type='text' {...register('telephonNum', { required: "טלפון זהו שדה חובה", pattern: { message: "מספר טלפון באורך 9 ספרות וחייב להתחיל ב0   ", value: /^0\d{8}$/ } })} />
                 {errors.telephonNum && <p>{errors.telephonNum.message}</p>}</h2>
             <h2>   <label > מס' נייד</label>
-                <input type='text'   {...register('phonNum', { required: "נייד זהו שדה חובה", pattern: { message:  "מספר טלפון באורך 10 ספרות וחייב להתחיל ב05 ", value: /^05\d{8}$/ } })} />
+                <input type='text'   {...register('phonNum', { required: "נייד זהו שדה חובה", pattern: { message: "מספר טלפון באורך 10 ספרות וחייב להתחיל ב05 ", value: /^05\d{8}$/ } })} />
                 {errors.phonNum && <p>{errors.phonNum.message}</p>}</h2>
             כתובת:
             <h2> <label> עיר </label>
-                <input type='text'  {...register('address.city', { required: "עיר זהו שדה חובה", pattern: { message: "אותיות בלבד", value: /^[A-Za-zא-ת\s]+$/ } })} />
-                {errors.city && <p>{errors.address.city.message}</p>} </h2>
+                <input type='text' defaultValue={patient.address.city}  {...register('city', { required: "עיר זהו שדה חובה", pattern: { message: "אותיות בלבד", value: /^[A-Za-zא-ת\s]+$/ } })} />
+                {errors.city && <p>{errors.city.message}</p>} </h2>
             <h2> <label> רחוב </label>
-                <input type='text' {...register('address.street', { required: "רחוב הוא שדה חובה", pattern: { message: "אותיות בלבד", value: /^[A-Za-zא-ת\s]+$/ } })} />
-                {errors.street && <p>{errors.address.street.message}</p>} </h2>
+                <input type='text' defaultValue={patient.address.street}{...register('street', { required: "רחוב הוא שדה חובה", pattern: { message: "אותיות בלבד", value: /^[A-Za-zא-ת\s]+$/ } })} />
+                {errors.street && <p>{errors.street.message}</p>} </h2>
             <h2> <label > מס' בית </label>
-                <input type='text'  {...register('address.houseNum', { required: "מספר בית הוא שדה חובה", pattern: { message: " מספרים בלבד!", value: /^[0-9]/, maxLength: 3 } })} />
-                {errors.houseNum && <p>{errors.address.houseNum.message}</p>} </h2>
+                <input type='text' defaultValue={patient.address.houseNum} {...register('houseNum', { required: "מספר בית הוא שדה חובה", pattern: { message: " מספרים בלבד!", value: /^[0-9]/ }, maxLength: { value: 3, message: "לא יותר משלוש ספרות" } })} />
+                {errors.houseNum && <p>{errors.houseNum.message}</p>} </h2>
 
 
 
             {!patient.positiveDate && <h2><label > תאריך בו נמצא חיובי לנגיף </label>
-                <input type='date' {...register('positiveDate', { min: { value: watch('dob'), message:"  תאריך   חייב להיות אחרי תאריך לידה"  } }, { max: { value: new Date().toISOString().split("T")[0], message: "תאריך החלמה חייב להיות גדול מהיום" } })} />
+                <input type='date' {...register('positiveDate', { min: { value: watch('dob'), message: "  תאריך   חייב להיות אחרי תאריך לידה" } }, { max: { value: new Date().toISOString().split("T")[0], message: "תאריך החלמה חייב להיות גדול מהיום" } })} />
                 {errors.positiveDate && <p>{errors.positiveDate.message}</p>}</h2>}
 
 
             {!patient.recoveryDate && <h2>  <label > תאריך החלמה </label>
-                <input type='date' {...register('recoveryDate', { min: { value: watch('positiveDate'), message: " תאריך החלמה אחרי תאריך קבלת הנגיף "} }, { max: { value: new Date().toISOString().split("T")[0], message:  " תאריך החלמה אחרי תאריך קבלת הנגיף " } }, { max: { value: new Date().toISOString().split("T")[0], message: "תאריך החלמה לא יכול להיות גדול מהיום"  } })} />
+                <input type='date' {...register('recoveryDate', { min: { value: watch('positiveDate'), message: " תאריך החלמה אחרי תאריך קבלת הנגיף " } }, { max: { value: new Date().toISOString().split("T")[0], message: " תאריך החלמה אחרי תאריך קבלת הנגיף " } }, { max: { value: new Date().toISOString().split("T")[0], message: "תאריך החלמה לא יכול להיות גדול מהיום" } })} />
                 {errorRecovery && <p>לא ניתן להכניס תאריך החלמה ללא תאריך קבלת הנגיף</p>}
                 {errors.recoveryDate && <p>{errors.recoveryDate.message}</p>}</h2>
             }
@@ -144,7 +151,7 @@ const EditPatient = () => {
             {addVaccine && <><h2>
 
                 <label>  תאריך קבלת חיסון</label>
-                <input type="date"  {...register('date', { min: { value: watch('dob'), message: "  תאריך   חייב להיות אחרי תאריך לידה" } }, { max: { value: new Date().toISOString().split("T")[0], message:  " תאריך החלמה אחרי תאריך קבלת הנגיף " } }, { max: { value: new Date().toISOString().split("T")[0], message: "תאריך קבלת חיסון לא יכול להיות גדול מהיום"  } })} /></h2>
+                <input type="date"  {...register('date', { min: { value: watch('dob'), message: "  תאריך   חייב להיות אחרי תאריך לידה" } }, { max: { value: new Date().toISOString().split("T")[0], message: " תאריך החלמה אחרי תאריך קבלת הנגיף " } }, { max: { value: new Date().toISOString().split("T")[0], message: "תאריך קבלת חיסון לא יכול להיות גדול מהיום" } })} /></h2>
                 <p>{errors.date?.message}</p>
                 <select {...register('manufacturer')}>
                     <option value={null}>{null} </option>

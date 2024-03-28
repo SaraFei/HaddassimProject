@@ -3,6 +3,7 @@
 
 import axios from "axios";
 
+
 let baseUrl = "http://localhost:8000/api/patient";
 
 export const getAllPatients = (page) => {
@@ -27,4 +28,7 @@ export const getCntUnVaccinFromServer = () => {
 
 export const getPatientCntFromServer = () => {
     return axios.get("http://localhost:8000/api/cntpatient");
+}
+export const getActivePatientFromServer=()=>{
+    return axios.get("http://localhost:8000/api/active");
 }

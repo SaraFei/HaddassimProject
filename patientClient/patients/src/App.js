@@ -6,6 +6,8 @@ import PatientDetails from './patient/PatientDetails.js';
 import AddPatientForm from './patient/AddPatientForm.js';
 import NavBar from './NavBar.js';
 import EditPatient from './patient/EditPatient.js';
+import CoronaDetails from './patient/CoronaDetails.js';
+
 
 
 
@@ -20,6 +22,7 @@ function App() {
         </Route>
         <Route path='addPatient' element={<AddPatientForm />} />
         <Route path='edit/:id' element={<EditPatient/>}/>
+        <Route path='coronaDetails' element={<CoronaDetails/>}/>
       </Routes>
     </div>
   </>

@@ -36,6 +36,8 @@ const AllPatients = () => {
       })
   }, [flag])
 
+  
+
   const handleChange = (event, value) => {
     setCurrentPage(value);
   };
