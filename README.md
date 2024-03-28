@@ -39,6 +39,12 @@ Before running the project, make sure you have the following installed:
 - **@emotion/react**: CSS-in-JS library designed for high performance style composition.
 - **@emotion/styled**: Styled component implementation for Emotion.
 
+
+
+### url
+- **all-patients**:http://localhost:3000/allpatients
+- **patients-details**:http://localhost:3000/allpatients/patientDetails/:id
+- **add-patient**:http://localhost:3000/addPatient
 ## Backend Dependencies
 
 - **cors**: CORS is a Node.js package for providing a Connect/Express middleware that can be used to enable CORS with various options.
@@ -157,6 +163,9 @@ Here are some screenshots of the project:
 
 ![Validation](https://github.com/SaraFei/HaddassimProject/blob/master/images/validation%20(2).png)
 
+![Validation](https://github.com/SaraFei/HaddassimProject/blob/master/bonusImages/%E2%80%8F%E2%80%8F%D7%A6%D7%99%D7%9C%D7%95%D7%9D%20%D7%9E%D7%A1%D7%9A%20(495).png)
+
+
 ![Validation](https://github.com/SaraFei/HaddassimProject/blob/master/images/validation.png)
 
 ![Validation](https://github.com/SaraFei/HaddassimProject/blob/master/images/delete%20(2).png)
@@ -172,3 +181,6 @@ Here are some screenshots of the project:
 ![Details](https://github.com/SaraFei/HaddassimProject/blob/master/images/details%20(4).png)
 
 ![Details](https://github.com/SaraFei/HaddassimProject/blob/master/images/details.png)
+
+
+![coronaDetails](https://github.com/SaraFei/HaddassimProject/blob/master/bonusImages/%E2%80%8F%E2%80%8F%D7%A6%D7%99%D7%9C%D7%95%D7%9D%20%D7%9E%D7%A1%D7%9A%20(494).png)
