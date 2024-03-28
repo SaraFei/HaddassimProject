@@ -6,6 +6,7 @@ import { connectToDB } from "./config/DBConfig.js";
 import patientRouter from "./routs/patient.js";
 import CntUnVaccin from "./routs/unVaccin.js"
 import CntPatients from "./routs/cntPatients.js"
+import cntActivePatients from "./routs/cntActive.js"
 import { errorHandling } from "./middleware/errorHandling.js";
 
 config();
@@ -17,7 +18,7 @@ app.use(cors({ origin: "*" }))
 app.use("/api/patient", patientRouter);
 app.use("/api/cnt", CntUnVaccin)
 app.use("/api/cntpatient", CntPatients);
-
+app.use("/api/active",cntActivePatients)
 
 errorHandling();
 let port = process.env.PORT || 3500;

@@ -16,8 +16,7 @@ const getAllPatients = async (req, res) => {
             .skip((parseInt(page) - 1) * parseInt(limit));
         console.log(allPatient);
         res.json(allPatient);
-        //מה זו השורה הזו??????
-        return allPatient;
+
     }
     catch (err) {
         res.status(400).send({ type: "get patient error", message: "התרחשה שגיאה בעת הבאת הפציינטים מהשרת" })
@@ -67,12 +66,12 @@ const addPatient = async (req, res) => {
 
 //Up date the patient details
 const updatePatient = async (req, res) => {
-    let { id } = req.params;
+    let { id,positiveDate, recoveryDate} = req.params;
     try {
 
-        // if(!positiveDate&&recoveryDate){
-        //     return res.status(409).json({type:"conflict",message:"לא יתכן להכניס תאריך החלמה ללא תאריך חיובי מהנגיף"})
-        // }
+        if(!positiveDate&&recoveryDate){
+            return res.status(409).json({type:"conflict",message:"לא יתכן להכניס תאריך החלמה ללא תאריך חיובי מהנגיף"})
+        }
 
         let validate = patientUpdateValidator(req.body);
         if (validate.error) {

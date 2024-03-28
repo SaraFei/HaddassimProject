@@ -159,7 +159,7 @@ Here are some screenshots of the project:
 
 ![Validation](https://github.com/SaraFei/HaddassimProject/blob/master/images/validation.png)
 
-![Delete](https://github.com/SaraFei/HaddassimProject/blob/master/images/delete%20(2).png)
+![Validation](https://github.com/SaraFei/HaddassimProject/blob/master/images/delete%20(2).png)
 
 ![After Delete](https://github.com/SaraFei/HaddassimProject/blob/master/images/afterDeletePatient.png)
 

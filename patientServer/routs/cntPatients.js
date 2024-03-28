@@ -1,7 +1,8 @@
-import exppress from "express";
-import { getCountPatients } from "../controllers/functions.js";
+import express from "express";
+import {  getCountPatients } from "../controllers/functions.js";
 
-const router = exppress.Router();
+const router = express.Router();
 
 router.get("/", getCountPatients);
+
 export default router;
